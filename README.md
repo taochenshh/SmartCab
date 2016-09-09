@@ -1,6 +1,11 @@
 # Project 4: Reinforcement Learning
 ## Train a Smartcab How to Drive
 This project aims to implement a Q-learning (Epsilon-greedy) algorithm to train a smartcab to drive. 
+
+### How it looks like
+![GUI](GUI.png)
+
+
 ### Install
 
  * Python 2.7
@@ -39,7 +44,3 @@ In a terminal or command window, navigate to the top-level project directory `sm
 ```python -m smartcab.agent```
 
 This will run the `agent.py` file and execute the agent code.
-
-
-### How it looks like
-![GUI](GUI.png)

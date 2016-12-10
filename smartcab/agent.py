@@ -101,20 +101,17 @@ class LearningAgent(Agent):
 
     def get_action(self, state):
 
-    	if random.random() < self.epsilon:
-    		action_selected = random.choice(Environment.valid_actions)
-    		q_value_selected = self.get_q_value(state, action_selected)
-    	else:
-    		q_value_selected = -10000000
-    		for action in Environment.valid_actions:
-    			q_value = self.get_q_value(state, action)
-    			if q_value > q_value_selected:
-    				q_value_selected = q_value
-    				action_selected = action
-    			elif q_value == q_value_selected: #if there are two actions that lead to same q value, we need to randomly choose one between them
-    			    action_selected = random.choice([action_selected, action])
-
-    	return action_selected, q_value_selected
+        if random.random() < self.epsilon:
+            action_selected = random.choice(self.env.valid_actions)
+            q_value_selected = self.get_q_value(state, action_selected)
+        else:
+            # find the maximum Q-value
+            q_value_selected = max([self.get_q_value(state, action_selected) for action_selected in self.env.valid_actions])
+            # find action or actions associated with q_value_selected
+            best_actions = [action for action in self.env.valid_actions if self.get_q_value(state, action) == q_value_selected]
+            # randomly pick one action among the best:
+            action_selected = random.choice(best_actions)
+        return action_selected, q_value_selected
 
     def get_q_value(self, state, action):
     	return self.Q_values.get((state,action), self.default_q)
@@ -130,7 +127,7 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.005, display=True)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0.005, display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
     sim.run(n_trials=100)  # run for a specified number of trials
